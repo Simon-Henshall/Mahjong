@@ -5,40 +5,48 @@ namespace Mahjong.Tests
 {
     public class Tests
     {
-        private readonly MainLogic mainLogic = new MainLogic();
-        
+        private MainLogic _mainLogic;
+        private List<Tile> _tileList;
+        private Deck _deck;
+        private DiscardPile _discardPile;
+        private Player _player;
+
         [SetUp]
         public void Setup()
         {
+            _mainLogic = new MainLogic();
+            _tileList = new List<Tile>();
+            _deck = _mainLogic.BuildDeck();
+            _discardPile = new DiscardPile();
+            _player = _mainLogic.AddPlayer();
         }
 
         [Test]
-        public void DeckGeneration()
+        public void DrawTileAndKeep()
         {
-            var result = mainLogic.BuildDeck();
-            Assert.IsInstanceOf(typeof(Deck), result);
-            Assert.AreEqual(144, result.Tiles.Count);
+            int theoreticalRemainingTileCount = _deck.Tiles.Count - 1;
+            var pickUpResult = _mainLogic.DrawTile(_deck, _player, true);
+            Assert.IsInstanceOf(typeof(Tile), pickUpResult);
+            Assert.AreEqual(theoreticalRemainingTileCount, _deck.Tiles.Count);
+            Assert.AreEqual(1, _player.Hand.Count);
+        }
+
+        public void DrawTileAndDiscard()
+        {
+            int theoreticalRemainingTileCount = _deck.Tiles.Count - 1;
+            var discardResult = _mainLogic.DrawTile(_deck, _player, true);
+            Assert.IsInstanceOf(typeof(Tile), discardResult);
+            Assert.AreEqual(theoreticalRemainingTileCount, _deck.Tiles.Count);
+            Assert.AreEqual(1, _discardPile.Tiles.Count);
         }
 
         [Test]
-        public void DrawTile()
+        public void HandGeneration()
         {
-            Player player = mainLogic.AddPlayer();
-            Deck deck = mainLogic.BuildDeck();
-            int theoreticalRemainingTileCount = deck.Tiles.Count - 1;
-            var result = mainLogic.DrawTile(deck, player);
-            Assert.IsInstanceOf(typeof(Tile), result);
-            Assert.AreEqual(theoreticalRemainingTileCount, deck.Tiles.Count);
+            var result = _mainLogic.DrawStartingHand(_deck, _player);
+            Assert.IsInstanceOf(typeof(Hand), result);
+            //Assert.AreEqual(13, result.Count);
         }
-        
-        //[Test]
-        //public void HandGeneration()
-        //{
-        //    var result = MainLogic.DrawHand();
-
-        //    Assert.IsInstanceOf(typeof(List<Tile>), result);
-        //    Assert.AreEqual(13, result.Count);
-        //}
 
         [TestFixture]
         public class ChiCalcuation
@@ -155,6 +163,16 @@ namespace Mahjong.Tests
                     new Tile(1, "circles"),
                     new Tile(1, "circles"),
                     new Tile(1, "circles")
+                ),
+                new Hand(
+                    new Tile(0, "wind", "east"),
+                    new Tile(0, "wind", "east"),
+                    new Tile(0, "wind", "east")
+                ),
+                new Hand(
+                    new Tile(0, "dragon", "red"),
+                    new Tile(0, "dragon", "red"),
+                    new Tile(0, "dragon", "red")
                 )
             };
 
@@ -254,6 +272,18 @@ namespace Mahjong.Tests
                     new Tile(1, "circles"),
                     new Tile(1, "circles"),
                     new Tile(1, "circles")
+                ),
+                new Hand(
+                    new Tile(0, "wind", "east"),
+                    new Tile(0, "wind", "east"),
+                    new Tile(0, "wind", "east"),
+                    new Tile(0, "wind", "east")
+                ),
+                new Hand(
+                    new Tile(0, "dragon", "red"),
+                    new Tile(0, "dragon", "red"),
+                    new Tile(0, "dragon", "red"),
+                    new Tile(0, "dragon", "red")
                 )
             };
 
