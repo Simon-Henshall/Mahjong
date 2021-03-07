@@ -1,4 +1,5 @@
-﻿using Mahjong.Core.Helpers;
+﻿using log4net;
+using Mahjong.Core.Helpers;
 using System;
 using System.Collections.Generic;
 
@@ -6,17 +7,22 @@ namespace Mahjong
 {
     public class MainLogic
     {
+        private readonly ILog _log;
+
         public MainLogic()
         {
+            _log = LogManager.GetLogger("mahjong");
         }
 
-        public static Player AddPlayer()
+        public Player AddPlayer()
         {
             return new Player();
         }
         
-        public static Deck BuildDeck()
+        public Deck BuildDeck()
         {
+            _log.Info("Building the deck");
+
             var list = new List<Tile>();
             var deck = new Deck();
             var tileDuplicateCount = 4;
@@ -65,9 +71,10 @@ namespace Mahjong
             return deck;
         }
 
-        public static Tile DrawTile(Deck deck, Player activePlayer)
+        public Tile DrawTile(Deck deck, Player activePlayer)
         {
-            
+            _log.Debug($"Player {activePlayer} is drawing a tile");
+
             var random = new Random();
             int selectedTileIndex = random.Next(deck.Tiles.Count);
             Tile selectedTile = deck.Tiles[selectedTileIndex];
