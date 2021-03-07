@@ -5,6 +5,8 @@ namespace Mahjong.Tests
 {
     public class Tests
     {
+        private readonly MainLogic mainLogic = new MainLogic();
+        
         [SetUp]
         public void Setup()
         {
@@ -13,7 +15,7 @@ namespace Mahjong.Tests
         [Test]
         public void DeckGeneration()
         {
-            var result = MainLogic.BuildDeck();
+            var result = mainLogic.BuildDeck();
             Assert.IsInstanceOf(typeof(Deck), result);
             Assert.AreEqual(144, result.Tiles.Count);
         }
@@ -21,10 +23,10 @@ namespace Mahjong.Tests
         [Test]
         public void DrawTile()
         {
-            Player player = MainLogic.AddPlayer();
-            Deck deck = MainLogic.BuildDeck();
+            Player player = mainLogic.AddPlayer();
+            Deck deck = mainLogic.BuildDeck();
             int theoreticalRemainingTileCount = deck.Tiles.Count - 1;
-            var result = MainLogic.DrawTile(deck, player);
+            var result = mainLogic.DrawTile(deck, player);
             Assert.IsInstanceOf(typeof(Tile), result);
             Assert.AreEqual(theoreticalRemainingTileCount, deck.Tiles.Count);
         }
