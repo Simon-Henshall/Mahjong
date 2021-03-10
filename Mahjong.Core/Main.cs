@@ -2,6 +2,7 @@
 using Mahjong.Core.Helpers;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Runtime.InteropServices;
 
 namespace Mahjong
@@ -108,67 +109,72 @@ namespace Mahjong
         }
 
         // Set up the starting hand for each player
-        public Hand DrawStartingHand(Deck deck, Player activePlayer)
+        public Hand DrawStartingHand(Deck deck, Player player)
         {
-            var hand = new Hand();
+            var hand = new Hand(new List<Tile>());
+            for (var i = 0; i < 13; i++)
+            {
+                hand.Add(DrawTile(deck, player, true));
+            }
             return hand;
         }
 
         // Called with only three tiles to check whether or not they form a valid chi
-        public static bool CalculateChi(Hand hand) // Tile Count = 3
+        public static bool CalculateChi(Hand hand) // hand.Tiles.Count = 3
         {
-            // Runs are only scored when they're all of the same suit
-            if ((hand.Tile1.Suit == hand.Tile2.Suit) && (hand.Tile1.Suit == hand.Tile3.Suit))
+
+            var orderedTiles = hand.Tiles.OrderBy(tile => tile.Number);
+            int count = 1; // We always have at least one tile
+            Tile firstTile = hand.Tiles.First();
+            int firstNumber = 0;
+            foreach (var tile in orderedTiles)
             {
-                if ((hand.Tile2.Number == hand.Tile1.Number + 1) && (hand.Tile3.Number == hand.Tile1.Number + 2))
+                // Skip duplicate values
+                if (tile.Number == firstNumber + count - 1)
                 {
-                    return true;
+                    // No need to do anything
                 }
+                // New value contributes to sequence
+                // Note runs are only scored when all tiles are of the same suit
+                else if (tile.Number == firstTile.Number + count && tile.Suit == firstTile.Suit)
+                {
+                    count++;
+                }
+                // End of one sequence, start of another
+                else
+                {
+                    if (count >= 3)
+                    {
+                        //_log.Info($"Found sequence of length {count}, starting at {firstNumber}");
+                        return true;
+                    }
+                    count = 1;
+                    firstNumber = tile.Number;
+                }
+            }
+            if (count >= 3)
+            {
+                //_log.Info($"Found sequence of length {count}, starting at {firstNumber}");
+                return true;
             }
 
             return false;
         }
 
         // Called with only three tiles to check whether or not they form a valid pong
-        public static bool CalculatePong(Hand hand) // Tile Count = 3
+        public static bool CalculatePong(Hand hand) // hand.Tiles.Count = 3
         {
-            // Handle regular suits
-            if ((hand.Tile1.Suit == hand.Tile2.Suit) && (hand.Tile1.Suit == hand.Tile3.Suit))
-            {
-                if ((hand.Tile2.Number == hand.Tile1.Number) && (hand.Tile3.Number == hand.Tile1.Number))
-                {
-                    return true;
-                }
-            }
-            // Handle winds and dragons
-            else if ((hand.Tile1.SpecialName != null && hand.Tile2.SpecialName != null && hand.Tile3.SpecialName != null) &&
-                (hand.Tile1.SpecialName == hand.Tile2.SpecialName) && (hand.Tile1.SpecialName == hand.Tile3.SpecialName))
-            {
-                return true;
-            }
-
-            return false;
+            // Sets are only scored when they're all of the same suit
+            var firstTile = hand.Tiles.First();
+            return hand.Tiles.All(tile => tile.Suit == firstTile.Suit && tile.Number == firstTile.Number);
         }
 
         // Called with only four tiles to check whether or not they form a valid pong
-        public static bool CalculateKang(Hand hand) // Tile Count = 4
+        public static bool CalculateKang(Hand hand) // hand.Tiles.Count = 4
         {
-            // Handle regular suits
-            if ((hand.Tile1.Suit == hand.Tile2.Suit) && (hand.Tile1.Suit == hand.Tile3.Suit) && (hand.Tile1.Suit == hand.Tile4.Suit))
-            {
-                if ((hand.Tile2.Number == hand.Tile1.Number) && (hand.Tile3.Number == hand.Tile1.Number) && (hand.Tile4.Number == hand.Tile1.Number))
-                {
-                    return true;
-                }
-            }
-            // Handle winds and dragons
-            else if ((hand.Tile1.SpecialName != null && hand.Tile2.SpecialName != null && hand.Tile3.SpecialName != null && hand.Tile4.SpecialName != null) &&
-                (hand.Tile1.SpecialName == hand.Tile2.SpecialName) && (hand.Tile1.SpecialName == hand.Tile3.SpecialName) && (hand.Tile1.SpecialName == hand.Tile4.SpecialName))
-            {
-                return true;
-            }
-
-            return false;
+            // Sets are only scored when they're all of the same suit
+            var firstTile = hand.Tiles.First();
+            return hand.Tiles.All(tile => tile.Suit == firstTile.Suit && tile.Number == firstTile.Number);
         }
     }
 }

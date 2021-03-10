@@ -45,48 +45,62 @@ namespace Mahjong.Tests
         {
             var result = _mainLogic.DrawStartingHand(_deck, _player);
             Assert.IsInstanceOf(typeof(Hand), result);
-            //Assert.AreEqual(13, result.Count);
+            Assert.AreEqual(13, result.Count);
         }
 
         [TestFixture]
         public class ChiCalcuation
         {
-            private static readonly object[] _GoodChiTestData =
+            private static readonly List<Hand> _GoodChiTestData = new List<Hand>()
             {
-                new Hand(
-                    new Tile(1, "bamboo"),
-                    new Tile(2, "bamboo"),
-                    new Tile(3, "bamboo")
+                new Hand(new List<Tile>()
+                    {
+                        new Tile(1, "bamboo"),
+                        new Tile(2, "bamboo"),
+                        new Tile(3, "bamboo")
+                    }  
                 ),
-                new Hand(
-                    new Tile(4, "bamboo"),
-                    new Tile(5, "bamboo"),
-                    new Tile(6, "bamboo")
+                new Hand(new List<Tile>()
+                    {
+                        new Tile(4, "bamboo"),
+                        new Tile(5, "bamboo"),
+                        new Tile(6, "bamboo")
+                    }
                 ),
-                new Hand(
-                    new Tile(7, "bamboo"),
-                    new Tile(8, "bamboo"),
-                    new Tile(9, "bamboo")
+                new Hand(new List<Tile>()
+                    {
+                        new Tile(7, "bamboo"),
+                        new Tile(8, "bamboo"),
+                        new Tile(9, "bamboo")
+                    }
                 ),
-                new Hand(
-                    new Tile(2, "characters"),
-                    new Tile(3, "characters"),
-                    new Tile(4, "characters")
+                new Hand(new List<Tile>()
+                    {
+                        new Tile(2, "characters"),
+                        new Tile(3, "characters"),
+                        new Tile(4, "characters")
+                    }
                 ),
-                new Hand(
-                    new Tile(5, "characters"),
-                    new Tile(6, "characters"),
-                    new Tile(7, "characters")
+                new Hand(new List<Tile>()
+                    {
+                        new Tile(5, "characters"),
+                        new Tile(6, "characters"),
+                        new Tile(7, "characters")
+                    }
                 ),
-                new Hand(
-                    new Tile(3, "circles"),
-                    new Tile(4, "circles"),
-                    new Tile(5, "circles")
+                new Hand(new List<Tile>()
+                    {
+                        new Tile(3, "circles"),
+                        new Tile(4, "circles"),
+                        new Tile(5, "circles")
+                    }
                 ),
-                new Hand(
-                    new Tile(6, "circles"),
-                    new Tile(7, "circles"),
-                    new Tile(8, "circles")
+                new Hand(new List<Tile>()
+                    {
+                        new Tile(6, "circles"),
+                        new Tile(7, "circles"),
+                        new Tile(8, "circles")
+                    }
                 )
             };
 
@@ -97,42 +111,56 @@ namespace Mahjong.Tests
                 Assert.IsTrue(result);
             }
 
-            private static readonly object[] _BadChiTestData =
+            private static readonly List<Hand> _BadChiTestData = new List<Hand>()
             {
-                new Hand(
-                    new Tile(1, "bamboo"),
-                    new Tile(1, "bamboo"),
-                    new Tile(1, "bamboo")
+                new Hand(new List<Tile>()
+                    {
+                        new Tile(1, "bamboo"),
+                        new Tile(1, "bamboo"),
+                        new Tile(1, "bamboo")
+                    }
                 ),
-                new Hand(
-                    new Tile(1, "characters"),
-                    new Tile(1, "characters"),
-                    new Tile(1, "characters")
+                new Hand(new List<Tile>()
+                    {
+                        new Tile(1, "characters"),
+                        new Tile(1, "characters"),
+                        new Tile(1, "characters")
+                    }
                 ),
-                new Hand(
-                    new Tile(1, "circles"),
-                    new Tile(1, "circles"),
-                    new Tile(1, "circles")
+                new Hand(new List<Tile>()
+                    {
+                        new Tile(1, "circles"),
+                        new Tile(1, "circles"),
+                        new Tile(1, "circles")
+                    }
                 ),
-                new Hand(
-                    new Tile(1, "bamboo"),
-                    new Tile(2, "characters"),
-                    new Tile(3, "circles")
+                new Hand(new List<Tile>()
+                    {
+                        new Tile(1, "bamboo"),
+                        new Tile(2, "characters"),
+                        new Tile(3, "circles")
+                    }
                 ),
-                new Hand(
-                    new Tile(1, "bamboo"),
-                    new Tile(2, "bamboo"),
-                    new Tile(3, "circles")
+                new Hand(new List<Tile>()
+                    {
+                        new Tile(1, "bamboo"),
+                        new Tile(2, "bamboo"),
+                        new Tile(3, "circles")
+                    }
                 ),
-                new Hand(
-                    new Tile(1, "bamboo"),
-                    new Tile(2, "characters"),
-                    new Tile(3, "characters")
+                new Hand(new List<Tile>()
+                    {
+                        new Tile(1, "bamboo"),
+                        new Tile(2, "characters"),
+                        new Tile(3, "characters")
+                    }
                 ),
-                new Hand(
-                    new Tile(1, "bamboo"),
-                    new Tile(2, "characters"),
-                    new Tile(3, "bamboo")
+                new Hand(new List<Tile>()
+                    {
+                        new Tile(1, "bamboo"),
+                        new Tile(2, "characters"),
+                        new Tile(3, "bamboo")
+                    }
                 ),
             };
 
@@ -147,32 +175,42 @@ namespace Mahjong.Tests
         [TestFixture]
         public class PongCalcuation
         {
-            private static readonly object[] _GoodPongTestData =
+            private static readonly List<Hand> _GoodPongTestData = new List<Hand>()
             {
-                new Hand(
-                    new Tile(1, "bamboo"),
-                    new Tile(1, "bamboo"),
-                    new Tile(1, "bamboo")
+                new Hand(new List<Tile>()
+                    {
+                        new Tile(1, "bamboo"),
+                        new Tile(1, "bamboo"),
+                        new Tile(1, "bamboo")
+                    }
                 ),
-                new Hand(
-                    new Tile(1, "characters"),
-                    new Tile(1, "characters"),
-                    new Tile(1, "characters")
+                new Hand(new List<Tile>()
+                    {
+                        new Tile(1, "characters"),
+                        new Tile(1, "characters"),
+                        new Tile(1, "characters")
+                    }
                 ),
-                new Hand(
-                    new Tile(1, "circles"),
-                    new Tile(1, "circles"),
-                    new Tile(1, "circles")
+                new Hand(new List<Tile>()
+                    {
+                        new Tile(1, "circles"),
+                        new Tile(1, "circles"),
+                        new Tile(1, "circles")
+                    }
                 ),
-                new Hand(
-                    new Tile(0, "wind", "east"),
-                    new Tile(0, "wind", "east"),
-                    new Tile(0, "wind", "east")
+                new Hand(new List<Tile>()
+                    {
+                        new Tile(0, "wind", "east"),
+                        new Tile(0, "wind", "east"),
+                        new Tile(0, "wind", "east")
+                    }
                 ),
-                new Hand(
-                    new Tile(0, "dragon", "red"),
-                    new Tile(0, "dragon", "red"),
-                    new Tile(0, "dragon", "red")
+                new Hand(new List<Tile>()
+                    {
+                        new Tile(0, "dragon", "red"),
+                        new Tile(0, "dragon", "red"),
+                        new Tile(0, "dragon", "red")
+                    }
                 )
             };
 
@@ -183,62 +221,84 @@ namespace Mahjong.Tests
                 Assert.IsTrue(result);
             }
 
-            private static readonly object[] _BadPongTestData =
+            private static readonly List<Hand> _BadPongTestData = new List<Hand>()
             {
-                new Hand(
-                    new Tile(1, "bamboo"),
-                    new Tile(2, "bamboo"),
-                    new Tile(3, "bamboo")
+                new Hand(new List<Tile>()
+                    {
+                        new Tile(1, "bamboo"),
+                        new Tile(2, "bamboo"),
+                        new Tile(3, "bamboo")
+                    }
                 ),
-                new Hand(
-                    new Tile(4, "bamboo"),
-                    new Tile(5, "bamboo"),
-                    new Tile(6, "bamboo")
+                new Hand(new List<Tile>()
+                    {
+                        new Tile(4, "bamboo"),
+                        new Tile(5, "bamboo"),
+                        new Tile(6, "bamboo")
+                    }
                 ),
-                new Hand(
-                    new Tile(7, "bamboo"),
-                    new Tile(8, "bamboo"),
-                    new Tile(9, "bamboo")
+                new Hand(new List<Tile>()
+                    {
+                        new Tile(7, "bamboo"),
+                        new Tile(8, "bamboo"),
+                        new Tile(9, "bamboo")
+                    }
                 ),
-                new Hand(
-                    new Tile(2, "characters"),
-                    new Tile(3, "characters"),
-                    new Tile(4, "characters")
+                new Hand(new List<Tile>()
+                    {
+                        new Tile(2, "characters"),
+                        new Tile(3, "characters"),
+                        new Tile(4, "characters")
+                    }
                 ),
-                new Hand(
-                    new Tile(5, "characters"),
-                    new Tile(6, "characters"),
-                    new Tile(7, "characters")
+                new Hand(new List<Tile>()
+                    {
+                        new Tile(5, "characters"),
+                        new Tile(6, "characters"),
+                        new Tile(7, "characters")
+                    }
                 ),
-                new Hand(
-                    new Tile(3, "circles"),
-                    new Tile(4, "circles"),
-                    new Tile(5, "circles")
+                new Hand(new List<Tile>()
+                    {
+                        new Tile(3, "circles"),
+                        new Tile(4, "circles"),
+                        new Tile(5, "circles")
+                    }
                 ),
-                new Hand(
-                    new Tile(6, "circles"),
-                    new Tile(7, "circles"),
-                    new Tile(8, "circles")
+                new Hand(new List<Tile>()
+                    {
+                        new Tile(6, "circles"),
+                        new Tile(7, "circles"),
+                        new Tile(8, "circles")
+                    }
                 ),
-                new Hand(
-                    new Tile(1, "bamboo"),
-                    new Tile(1, "characters"),
-                    new Tile(1, "circles")
+                new Hand(new List<Tile>()
+                    {
+                        new Tile(1, "bamboo"),
+                        new Tile(1, "characters"),
+                        new Tile(1, "circles")
+                    }
                 ),
-                new Hand(
-                    new Tile(1, "bamboo"),
-                    new Tile(1, "bamboo"),
-                    new Tile(1, "circles")
+                new Hand(new List<Tile>()
+                    {
+                        new Tile(1, "bamboo"),
+                        new Tile(1, "bamboo"),
+                        new Tile(1, "circles")
+                    }
                 ),
-                new Hand(
-                    new Tile(1, "bamboo"),
-                    new Tile(1, "characters"),
-                    new Tile(1, "characters")
+                new Hand(new List<Tile>()
+                    {
+                        new Tile(1, "bamboo"),
+                        new Tile(1, "characters"),
+                        new Tile(1, "characters")
+                    }
                 ),
-                new Hand(
-                    new Tile(1, "bamboo"),
-                    new Tile(1, "characters"),
-                    new Tile(1, "bamboo")
+                new Hand(new List<Tile>()
+                    {
+                        new Tile(1, "bamboo"),
+                        new Tile(1, "characters"),
+                        new Tile(1, "bamboo")
+                    }
                 ),
             };
 
@@ -253,37 +313,47 @@ namespace Mahjong.Tests
         [TestFixture]
         public class KangCalcuation
         {
-            private static readonly object[] _GoodKangTestData =
+            private static readonly List<Hand> _GoodKangTestData = new List<Hand>()
             {
-                new Hand(
-                    new Tile(1, "bamboo"),
-                    new Tile(1, "bamboo"),
-                    new Tile(1, "bamboo"),
-                    new Tile(1, "bamboo")
+                new Hand(new List<Tile>()
+                    {
+                        new Tile(1, "bamboo"),
+                        new Tile(1, "bamboo"),
+                        new Tile(1, "bamboo"),
+                        new Tile(1, "bamboo")
+                    }
                 ),
-                new Hand(
-                    new Tile(1, "characters"),
-                    new Tile(1, "characters"),
-                    new Tile(1, "characters"),
-                    new Tile(1, "characters")
+                new Hand(new List<Tile>()
+                    {
+                        new Tile(1, "characters"),
+                        new Tile(1, "characters"),
+                        new Tile(1, "characters"),
+                        new Tile(1, "characters")
+                    }
                 ),
-                new Hand(
-                    new Tile(1, "circles"),
-                    new Tile(1, "circles"),
-                    new Tile(1, "circles"),
-                    new Tile(1, "circles")
+                new Hand(new List<Tile>()
+                    {
+                        new Tile(1, "circles"),
+                        new Tile(1, "circles"),
+                        new Tile(1, "circles"),
+                        new Tile(1, "circles")
+                    }
                 ),
-                new Hand(
-                    new Tile(0, "wind", "east"),
-                    new Tile(0, "wind", "east"),
-                    new Tile(0, "wind", "east"),
-                    new Tile(0, "wind", "east")
+                new Hand(new List<Tile>()
+                    {
+                        new Tile(0, "wind", "east"),
+                        new Tile(0, "wind", "east"),
+                        new Tile(0, "wind", "east"),
+                        new Tile(0, "wind", "east")
+                    }
                 ),
-                new Hand(
-                    new Tile(0, "dragon", "red"),
-                    new Tile(0, "dragon", "red"),
-                    new Tile(0, "dragon", "red"),
-                    new Tile(0, "dragon", "red")
+                new Hand(new List<Tile>()
+                    {
+                        new Tile(0, "dragon", "red"),
+                        new Tile(0, "dragon", "red"),
+                        new Tile(0, "dragon", "red"),
+                        new Tile(0, "dragon", "red")
+                    }
                 )
             };
 
@@ -294,61 +364,79 @@ namespace Mahjong.Tests
                 Assert.IsTrue(result);
             }
 
-            private static readonly object[] _BadKangTestData =
+            private static readonly List<Hand> _BadKangTestData = new List<Hand>()
             {
-                new Hand(
-                    new Tile(1, "bamboo"),
-                    new Tile(2, "bamboo"),
-                    new Tile(3, "bamboo"),
-                    new Tile(4, "bamboo")
+                new Hand(new List<Tile>()
+                    {
+                        new Tile(1, "bamboo"),
+                        new Tile(2, "bamboo"),
+                        new Tile(3, "bamboo"),
+                        new Tile(4, "bamboo")
+                    }
                 ),
-                new Hand(
-                    new Tile(5, "bamboo"),
-                    new Tile(6, "bamboo"),
-                    new Tile(7, "bamboo"),
-                    new Tile(8, "bamboo")
+                new Hand(new List<Tile>()
+                    {
+                        new Tile(5, "bamboo"),
+                        new Tile(6, "bamboo"),
+                        new Tile(7, "bamboo"),
+                        new Tile(8, "bamboo")
+                    }
                 ),
-                new Hand(
-                    new Tile(2, "characters"),
-                    new Tile(3, "characters"),
-                    new Tile(4, "characters"),
-                    new Tile(5, "characters")
+                new Hand(new List<Tile>()
+                    {
+                        new Tile(2, "characters"),
+                        new Tile(3, "characters"),
+                        new Tile(4, "characters"),
+                        new Tile(5, "characters")
+                    }
                 ),
-                new Hand(
-                    new Tile(6, "characters"),
-                    new Tile(7, "characters"),
-                    new Tile(8, "characters"),
-                    new Tile(9, "characters")
+                new Hand(new List<Tile>()
+                    {
+                        new Tile(6, "characters"),
+                        new Tile(7, "characters"),
+                        new Tile(8, "characters"),
+                        new Tile(9, "characters")
+                    }
                 ),
-                new Hand(
-                    new Tile(3, "circles"),
-                    new Tile(4, "circles"),
-                    new Tile(5, "circles"),
-                    new Tile(6, "circles")
+                new Hand(new List<Tile>()
+                    {
+                        new Tile(3, "circles"),
+                        new Tile(4, "circles"),
+                        new Tile(5, "circles"),
+                        new Tile(6, "circles")
+                    }
                 ),
-                new Hand(
-                    new Tile(1, "bamboo"),
-                    new Tile(1, "bamboo"),
-                    new Tile(1, "bamboo"),
-                    new Tile(1, "circles")
+                new Hand(new List<Tile>()
+                    {
+                        new Tile(1, "bamboo"),
+                        new Tile(1, "bamboo"),
+                        new Tile(1, "bamboo"),
+                        new Tile(1, "circles")
+                    }
                 ),
-                new Hand(
-                    new Tile(1, "bamboo"),
-                    new Tile(1, "bamboo"),
-                    new Tile(1, "circles"),
-                    new Tile(1, "bamboo")
+                new Hand(new List<Tile>()
+                    {
+                        new Tile(1, "bamboo"),
+                        new Tile(1, "bamboo"),
+                        new Tile(1, "circles"),
+                        new Tile(1, "bamboo")
+                    }
                 ),
-                new Hand(
-                    new Tile(1, "bamboo"),
-                    new Tile(1, "characters"),
-                    new Tile(1, "characters"),
-                    new Tile(1, "bamboo")
+                new Hand(new List<Tile>()
+                    {
+                        new Tile(1, "bamboo"),
+                        new Tile(1, "characters"),
+                        new Tile(1, "characters"),
+                        new Tile(1, "bamboo")
+                    }
                 ),
-                new Hand(
-                    new Tile(1, "bamboo"),
-                    new Tile(1, "characters"),
-                    new Tile(1, "bamboo"),
-                    new Tile(1, "bamboo")
+                new Hand(new List<Tile>()
+                    {
+                        new Tile(1, "bamboo"),
+                        new Tile(1, "characters"),
+                        new Tile(1, "bamboo"),
+                        new Tile(1, "bamboo")
+                    }
                 ),
             };
 
