@@ -6,7 +6,6 @@ namespace Mahjong.Tests
     public class Tests
     {
         private MainLogic _mainLogic;
-        private List<Tile> _tileList;
         private Deck _deck;
         private DiscardPile _discardPile;
         private Player _player;
@@ -15,7 +14,6 @@ namespace Mahjong.Tests
         public void Setup()
         {
             _mainLogic = new MainLogic();
-            _tileList = new List<Tile>();
             _deck = _mainLogic.BuildDeck();
             _discardPile = new DiscardPile();
             _player = _mainLogic.AddPlayer();

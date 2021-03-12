@@ -3,11 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30717.126
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mahjong.Core", "Mahjong.Core\Mahjong.Core.csproj", "{E8F1FB5A-4B83-44D2-9093-2B00D0A6DB04}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mahjong.Droid", "Mahjong.Droid\Mahjong.Droid.csproj", "{5964BB07-464E-4EE2-99DA-B08DC5295228}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mahjong.Tests", "Mahjong.Tests\Mahjong.Tests.csproj", "{FAB06C02-4C01-4F36-9A50-B0EC54A64DC5}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mahjong.Core", "Mahjong.Core\Mahjong.Core.csproj", "{445C9815-F226-422C-9A94-204751DB5E22}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,10 +15,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{E8F1FB5A-4B83-44D2-9093-2B00D0A6DB04}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{E8F1FB5A-4B83-44D2-9093-2B00D0A6DB04}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{E8F1FB5A-4B83-44D2-9093-2B00D0A6DB04}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{E8F1FB5A-4B83-44D2-9093-2B00D0A6DB04}.Release|Any CPU.Build.0 = Release|Any CPU
 		{5964BB07-464E-4EE2-99DA-B08DC5295228}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{5964BB07-464E-4EE2-99DA-B08DC5295228}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5964BB07-464E-4EE2-99DA-B08DC5295228}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
@@ -29,6 +25,10 @@ Global
 		{FAB06C02-4C01-4F36-9A50-B0EC54A64DC5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FAB06C02-4C01-4F36-9A50-B0EC54A64DC5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FAB06C02-4C01-4F36-9A50-B0EC54A64DC5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{445C9815-F226-422C-9A94-204751DB5E22}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{445C9815-F226-422C-9A94-204751DB5E22}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{445C9815-F226-422C-9A94-204751DB5E22}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{445C9815-F226-422C-9A94-204751DB5E22}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

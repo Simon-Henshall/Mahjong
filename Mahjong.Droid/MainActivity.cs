@@ -7,13 +7,18 @@ using Android.Support.V7.App;
 using Android.Views;
 using Android.Widget;
 
-namespace Mahjong
+namespace Mahjong.Droid
 {
     [Activity(Label = "@string/app_name", Theme = "@style/AppTheme.NoActionBar", MainLauncher = true)]
     public class MainActivity : AppCompatActivity
     {
+
+        private MainLogic _mainLogic;
+
         protected override void OnCreate(Bundle savedInstanceState)
         {
+            _mainLogic = new MainLogic();
+
             base.OnCreate(savedInstanceState);
             Xamarin.Essentials.Platform.Init(this, savedInstanceState);
             SetContentView(Resource.Layout.activity_main);

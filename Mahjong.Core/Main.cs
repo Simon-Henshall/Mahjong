@@ -72,7 +72,7 @@ namespace Mahjong
                 }
             }
 
-            _tileList.Shuffle(); 
+            _tileList.Shuffle();
             _deck.Tiles = _tileList;
 
             return _deck;
