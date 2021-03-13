@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using Android.App;
 using Android.OS;
 using Android.Runtime;
@@ -12,12 +13,17 @@ namespace Mahjong.Droid
     [Activity(Label = "@string/app_name", Theme = "@style/AppTheme.NoActionBar", MainLauncher = true)]
     public class MainActivity : AppCompatActivity
     {
-
         private MainLogic _mainLogic;
+        private Deck _deck;
+        private Player _player;
+        private Hand _hand;
 
         protected override void OnCreate(Bundle savedInstanceState)
         {
             _mainLogic = new MainLogic();
+            _deck = _mainLogic.BuildDeck();
+            _player = _mainLogic.AddPlayer();
+            _hand = _mainLogic.DrawStartingHand(_deck, _player);
 
             base.OnCreate(savedInstanceState);
             Xamarin.Essentials.Platform.Init(this, savedInstanceState);
@@ -50,7 +56,7 @@ namespace Mahjong.Droid
         private void FabOnClick(object sender, EventArgs eventArgs)
         {
             View view = (View) sender;
-            Snackbar.Make(view, "Replace with your own action", Snackbar.LengthLong)
+            Snackbar.Make(view, _hand.First().Suit, Snackbar.LengthLong)
                 .SetAction("Action", (Android.Views.View.IOnClickListener)null).Show();
         }
 
