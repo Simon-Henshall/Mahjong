@@ -8,31 +8,32 @@ namespace Mahjong.Tests
         private MainLogic _mainLogic;
         private Deck _deck;
         private DiscardPile _discardPile;
-        private Player _player;
+        private List<Player> _players;
 
         [SetUp]
         public void Setup()
         {
             _mainLogic = new MainLogic();
             _deck = _mainLogic.BuildDeck();
-            _discardPile = new DiscardPile();
-            _player = _mainLogic.AddPlayer();
+            _discardPile = _mainLogic.GetDiscardPile();
+            _players = _mainLogic.SetUpPlayers();
         }
 
         [Test]
         public void DrawTileAndKeep()
         {
             int theoreticalRemainingTileCount = _deck.Tiles.Count - 1;
-            var pickUpResult = _mainLogic.DrawTile(_deck, _player, true);
+            var pickUpResult = _mainLogic.DrawTile(_deck, _players[0], true);
             Assert.IsInstanceOf(typeof(Tile), pickUpResult);
             Assert.AreEqual(theoreticalRemainingTileCount, _deck.Tiles.Count);
-            Assert.AreEqual(1, _player.Hand.Count);
+            Assert.AreEqual(14, _players[0].Hand.Count);
         }
 
+        [Test]
         public void DrawTileAndDiscard()
         {
             int theoreticalRemainingTileCount = _deck.Tiles.Count - 1;
-            var discardResult = _mainLogic.DrawTile(_deck, _player, true);
+            var discardResult = _mainLogic.DrawTile(_deck, _players[0], false);
             Assert.IsInstanceOf(typeof(Tile), discardResult);
             Assert.AreEqual(theoreticalRemainingTileCount, _deck.Tiles.Count);
             Assert.AreEqual(1, _discardPile.Tiles.Count);
@@ -41,7 +42,7 @@ namespace Mahjong.Tests
         [Test]
         public void HandGeneration()
         {
-            var result = _mainLogic.DrawStartingHand(_deck, _player);
+            var result = _mainLogic.DrawStartingHand(_deck, _players[0]);
             Assert.IsInstanceOf(typeof(Hand), result);
             Assert.AreEqual(13, result.Count);
         }

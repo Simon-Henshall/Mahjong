@@ -14,14 +14,20 @@ namespace Mahjong
         private List<Tile> _tileList;
         private Deck _deck;
         private DiscardPile _discardPile;
+        private List<Player> _players;
+
+        // ToDo: Shift this logic
+        // Game variables
+        private const int _playerCount = 4;
 
         public MainLogic()
         {
             _log = LogManager.GetLogger("mahjong");
             _random = new Random();
             _tileList = new List<Tile>();
-            _deck = new Deck();
             _discardPile = new DiscardPile();
+            _deck = BuildDeck();
+            _players = SetUpPlayers();
         }
 
         public Player AddPlayer()
@@ -31,11 +37,12 @@ namespace Mahjong
         
         public Deck BuildDeck()
         {
+            _deck = new Deck();
             _log.Info("Building the deck");
 
             var tileDuplicateCount = 4;
             var suits = new List<string> { "bamboo", "circles", "characters" };
-            var winds = new List<string> { "north", "south", "east", "west" };
+            var winds = new List<string> { "east", "south", "west", "north" };
             var dragons = new List<string> { "green", "red", "white" };
             var pretties = new List<string> { "flowers", "seasons" };
 
@@ -78,21 +85,56 @@ namespace Mahjong
             return _deck;
         }
 
+        public DiscardPile GetDiscardPile()
+        {
+            return _discardPile;
+        }
+
+        public List<Player> SetUpPlayers()
+        {
+            _players = new List<Player>();
+
+            // Set up the AI players
+            for (var i = 0; i < _playerCount; i++)
+            {
+                Player player = AddPlayer();
+                DrawStartingHand(_deck, player);
+                _players.Add(player);
+            }
+
+            // Set up the human player
+            _players[0].IsHuman = true;
+
+            // ToDo: Rotate this for subsequent games
+            // ToDo: Tie to a die function
+            // Assign winds
+            var winds = new List<string> { "east", "south", "west", "north" };
+            var randomIndex = _random.Next(winds.Count - 1);
+            for (var i = 0; i < _playerCount; i++)
+            {
+                if (randomIndex == winds.Count - 1)
+                {
+                    randomIndex = 0;
+                }
+                else
+                {
+                    randomIndex += 1;
+                }
+
+                _players[i].Wind = winds[randomIndex];
+            }
+
+            return _players;
+        }
+
         public Tile DrawTile(Deck deck, Player activePlayer, [Optional] bool playerWantsTile)
         {
             _log.Debug($"Player {activePlayer} is drawing a tile");
-            int selectedTileIndex = _random.Next(deck.Tiles.Count);
+            int selectedTileIndex = _random.Next(deck.Tiles.Count - 1);
             Tile selectedTile = deck.Tiles[selectedTileIndex];
 
             // Remove from the deck
             deck.Tiles.RemoveAt(selectedTileIndex);
-
-            // ToDo: Randomise whether or not the player wants the tile (for now)
-            // Default parameters must be compile-time constants so we cannot set it as a function parameter
-            if (!playerWantsTile)
-            {
-                playerWantsTile = _random.Next(100) < 50;
-            }
 
             // Check whether or not the player wants the tile
             if (playerWantsTile)
@@ -169,7 +211,7 @@ namespace Mahjong
             return hand.Tiles.All(tile => tile.Suit == firstTile.Suit && tile.Number == firstTile.Number);
         }
 
-        // Called with only four tiles to check whether or not they form a valid pong
+        // Called with only four tiles to check whether or not they form a valid kang
         public static bool CalculateKang(Hand hand) // hand.Tiles.Count = 4
         {
             // Sets are only scored when they're all of the same suit

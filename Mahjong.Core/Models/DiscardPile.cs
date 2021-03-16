@@ -4,10 +4,6 @@ namespace Mahjong
 {
     public class DiscardPile
     {
-        public DiscardPile()
-        {
-        }
-
-        public List<Tile> Tiles { get; set; }
+        public List<Tile> Tiles { get; set; } = new List<Tile>();
     }
 }
