@@ -14,16 +14,22 @@ namespace Mahjong.Tests
         public void Setup()
         {
             _mainLogic = new MainLogic();
-            _deck = _mainLogic.BuildDeck();
+            _deck = _mainLogic.GetDeck();
             _discardPile = _mainLogic.GetDiscardPile();
-            _players = _mainLogic.SetUpPlayers();
+            _players = _mainLogic.GetPlayers();
+        }
+
+        [Test]
+        public void PlayerOneDiscardsPlayerTwoWants()
+        {
+            DrawTileAndDiscard();
         }
 
         [Test]
         public void DrawTileAndKeep()
         {
             int theoreticalRemainingTileCount = _deck.Tiles.Count - 1;
-            var pickUpResult = _mainLogic.DrawTile(_deck, _players[0], true);
+            var pickUpResult = _mainLogic.DrawTile(_deck, _players[0], "wall", true);
             Assert.IsInstanceOf(typeof(Tile), pickUpResult);
             Assert.AreEqual(theoreticalRemainingTileCount, _deck.Tiles.Count);
             Assert.AreEqual(14, _players[0].Hand.Count);
@@ -33,10 +39,24 @@ namespace Mahjong.Tests
         public void DrawTileAndDiscard()
         {
             int theoreticalRemainingTileCount = _deck.Tiles.Count - 1;
-            var discardResult = _mainLogic.DrawTile(_deck, _players[0], false);
+            var discardResult = _mainLogic.DrawTile(_deck, _players[0], "wall", false);
             Assert.IsInstanceOf(typeof(Tile), discardResult);
             Assert.AreEqual(theoreticalRemainingTileCount, _deck.Tiles.Count);
             Assert.AreEqual(1, _discardPile.Tiles.Count);
+        }
+
+        [Test]
+        public void PickUpDiscard()
+        {
+            _discardPile.Tiles = new List<Tile>()
+            {
+                new Tile(5, "circles"),
+                new Tile(6, "bamboo")
+            };
+            int theoreticalRemainingTileCount = _discardPile.Tiles.Count - 1;
+            var result = _mainLogic.DrawTile(_deck, _players[0], "discardPile", true);
+            Assert.IsInstanceOf(typeof(Tile), result);
+            Assert.AreEqual(theoreticalRemainingTileCount, _discardPile.Tiles.Count);
         }
 
         [Test]
@@ -45,6 +65,36 @@ namespace Mahjong.Tests
             var result = _mainLogic.DrawStartingHand(_deck, _players[0]);
             Assert.IsInstanceOf(typeof(Hand), result);
             Assert.AreEqual(13, result.Count);
+        }
+
+        [Test]
+        public void FullNewGameGeneration()
+        {
+            var result = _mainLogic.SetupFullGame(_players, _deck, _discardPile);
+            Assert.IsInstanceOf(typeof(Game), result);
+            // Check that the 144 tiles have been distributed as 13 tiles to each player
+            Assert.AreEqual(144 - (13 * _players.Count), result.Deck.Tiles.Count);
+            for (var i = 0; i < _players.Count; i++)
+            {
+                Assert.AreEqual(13, result.Players[i].Hand.Count);
+                Assert.IsNotNull(result.Players[i].Wind);
+            }
+            Assert.AreEqual(4, result.Players.Count); // ToDo: Optional number of players
+            Assert.AreEqual(true, result.Players[0].IsHuman);
+            // Set up the active player
+            for (var i = 0; i < _players.Count; i++)
+            {
+                // The East player will be active at the start of the game
+                // ToDo: Make this a constant
+                if (_players[i].Wind == "east")
+                {
+                    Assert.AreEqual(true, result.Players[i].IsActive);
+                }
+                else
+                {
+                    Assert.AreEqual(false, result.Players[i].IsActive);
+                }
+            }
         }
 
         [TestFixture]

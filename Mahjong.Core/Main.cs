@@ -34,7 +34,54 @@ namespace Mahjong
         {
             return new Player();
         }
-        
+
+        public List<Player> SetUpPlayers()
+        {
+            _players = new List<Player>();
+
+            // Set up the AI players
+            for (var i = 0; i < _playerCount; i++)
+            {
+                Player player = AddPlayer();
+                DrawStartingHand(_deck, player);
+                _players.Add(player);
+            }
+
+            // Set up the human player
+            _players[0].IsHuman = true;
+
+            // ToDo: Rotate this for subsequent games
+            // ToDo: Tie to a die function
+            // Assign winds
+            var winds = new List<string> { "east", "south", "west", "north" };
+            var randomIndex = _random.Next(winds.Count - 1);
+            for (var i = 0; i < _playerCount; i++)
+            {
+                if (randomIndex == winds.Count - 1)
+                {
+                    randomIndex = 0;
+                }
+                else
+                {
+                    randomIndex += 1;
+                }
+
+                _players[i].Wind = winds[randomIndex];
+            }
+
+            // Set up the active player
+            for (var i = 0; i < _playerCount; i++)
+            {
+                // The East player will be active at the start of the game
+                if (_players[i].Wind == "east")
+                {
+                    _players[i].IsActive = true;
+                }
+            }
+
+            return _players;
+        }
+
         public Deck BuildDeck()
         {
             _deck = new Deck();
@@ -85,69 +132,55 @@ namespace Mahjong
             return _deck;
         }
 
+        public Deck GetDeck()
+        {
+            return _deck;
+        }
+        
         public DiscardPile GetDiscardPile()
         {
             return _discardPile;
         }
 
-        public List<Player> SetUpPlayers()
+        public List<Player> GetPlayers()
         {
-            _players = new List<Player>();
-
-            // Set up the AI players
-            for (var i = 0; i < _playerCount; i++)
-            {
-                Player player = AddPlayer();
-                DrawStartingHand(_deck, player);
-                _players.Add(player);
-            }
-
-            // Set up the human player
-            _players[0].IsHuman = true;
-
-            // ToDo: Rotate this for subsequent games
-            // ToDo: Tie to a die function
-            // Assign winds
-            var winds = new List<string> { "east", "south", "west", "north" };
-            var randomIndex = _random.Next(winds.Count - 1);
-            for (var i = 0; i < _playerCount; i++)
-            {
-                if (randomIndex == winds.Count - 1)
-                {
-                    randomIndex = 0;
-                }
-                else
-                {
-                    randomIndex += 1;
-                }
-
-                _players[i].Wind = winds[randomIndex];
-            }
-
             return _players;
         }
 
-        public Tile DrawTile(Deck deck, Player activePlayer, [Optional] bool playerWantsTile)
+        public Tile DrawTile(Deck deck, Player activePlayer, [Optional] string location, [Optional] bool playerWantsTile)
         {
+            Tile selectedTile;
             _log.Debug($"Player {activePlayer} is drawing a tile");
-            int selectedTileIndex = _random.Next(deck.Tiles.Count - 1);
-            Tile selectedTile = deck.Tiles[selectedTileIndex];
-
-            // Remove from the deck
-            deck.Tiles.RemoveAt(selectedTileIndex);
-
-            // Check whether or not the player wants the tile
-            if (playerWantsTile)
+            if (location == "discardPile")
             {
-                // Add to the player's hand
-                activePlayer.Hand.Add(selectedTile);
+                _log.Debug($"(from the discard pile)");
+                int selectedTileIndex = _random.Next(_discardPile.Tiles.Count - 1);
+                _discardPile.Tiles.RemoveAt(selectedTileIndex);
+                selectedTile = _discardPile.Tiles[selectedTileIndex];
             }
             else
             {
-                _discardPile.Tiles.Add(selectedTile);
+                _log.Debug($"(from the wall)");
+                // ToDo: This shouldn't be randomised -- but does it really matter?
+                int selectedTileIndex = _random.Next(deck.Tiles.Count - 1);
+                selectedTile = deck.Tiles[selectedTileIndex];
+
+                // Remove from the deck
+                deck.Tiles.RemoveAt(selectedTileIndex);
+
+                // Check whether or not the player wants the tile
+                if (playerWantsTile)
+                {
+                    // Add to the player's hand
+                    activePlayer.Hand.Add(selectedTile);
+                }
+                else
+                {
+                    _discardPile.Tiles.Add(selectedTile);
+                }
             }
 
-            return deck.Tiles[selectedTileIndex];
+            return selectedTile;
         }
 
         // Set up the starting hand for each player
@@ -156,9 +189,16 @@ namespace Mahjong
             var hand = new Hand(new List<Tile>());
             for (var i = 0; i < 13; i++)
             {
-                hand.Add(DrawTile(deck, player, true));
+                hand.Add(DrawTile(deck, player, "wall", true));
             }
             return hand;
+        }
+
+        // Set up the entire game
+        public Game SetupFullGame(List<Player> _players, Deck _deck, DiscardPile _discardPile)
+        {
+            var game = new Game(_players, _deck, _discardPile);
+            return game;
         }
 
         // Called with only three tiles to check whether or not they form a valid chi

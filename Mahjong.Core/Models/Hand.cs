@@ -2,7 +2,7 @@
 
 namespace Mahjong
 {
-    public class Hand: List<Tile>
+    public class Hand : List<Tile>
     {
         public List<Tile> Tiles = new List<Tile>();
 
