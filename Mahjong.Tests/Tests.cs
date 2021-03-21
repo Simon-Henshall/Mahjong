@@ -9,6 +9,7 @@ namespace Mahjong.Tests
         private Deck _deck;
         private DiscardPile _discardPile;
         private List<Player> _players;
+        private int _playerCount = 4;
 
         [SetUp]
         public void Setup()
@@ -20,9 +21,33 @@ namespace Mahjong.Tests
         }
 
         [Test]
-        public void PlayerOneDiscardsPlayerTwoWants()
+        public void GetActivePlayer()
         {
-            DrawTileAndDiscard();
+            Player player = _mainLogic.GetActivePlayer();
+            Assert.AreEqual(true, player.IsActive);
+        }
+
+        [Test]
+        public void SwapPlayer()
+        {
+            _mainLogic.SwapPlayer();
+            for (var i = 0; i < _playerCount; i++)
+            {
+                // The East player will be active at the start of the game
+                if (_players[i].Wind == "east")
+                {
+                    Assert.AreEqual(false, _players[i].IsActive);
+                    if (i + 1 == _playerCount)
+                    {
+                        Assert.AreEqual(true, _players[0].IsActive);
+                    }
+                    else
+                    {
+                        Assert.AreEqual(true, _players[i + 1].IsActive);
+                    }
+                }
+            }
+            
         }
 
         [Test]
@@ -48,15 +73,15 @@ namespace Mahjong.Tests
         [Test]
         public void PickUpDiscard()
         {
-            _discardPile.Tiles = new List<Tile>()
-            {
-                new Tile(5, "circles"),
-                new Tile(6, "bamboo")
-            };
-            int theoreticalRemainingTileCount = _discardPile.Tiles.Count - 1;
-            var result = _mainLogic.DrawTile(_deck, _players[0], "discardPile", true);
-            Assert.IsInstanceOf(typeof(Tile), result);
-            Assert.AreEqual(theoreticalRemainingTileCount, _discardPile.Tiles.Count);
+            Player _player1 = _mainLogic.GetActivePlayer();
+            _mainLogic.DrawTile(_deck, _player1, "wall", false); // Get a tile into the discard pile
+            Assert.AreEqual(1, _discardPile.Tiles.Count); 
+            _mainLogic.SwapPlayer();
+            Player _player2 = _mainLogic.GetActivePlayer();
+            int theoreticalPlayerTwoTileCount = _player2.Hand.Count + 1;
+            _mainLogic.DrawTile(_deck, _mainLogic.GetActivePlayer(), "discardPile");
+            Assert.AreEqual(theoreticalPlayerTwoTileCount, _player2.Hand.Count);
+            Assert.AreEqual(0, _discardPile.Tiles.Count);
         }
 
         [Test]
@@ -70,17 +95,17 @@ namespace Mahjong.Tests
         [Test]
         public void FullNewGameGeneration()
         {
-            var result = _mainLogic.SetupFullGame(_players, _deck, _discardPile);
-            Assert.IsInstanceOf(typeof(Game), result);
+            Game game = _mainLogic.SetupFullGame(_players, _deck, _discardPile);
+            Assert.IsInstanceOf(typeof(Game), game);
             // Check that the 144 tiles have been distributed as 13 tiles to each player
-            Assert.AreEqual(144 - (13 * _players.Count), result.Deck.Tiles.Count);
+            Assert.AreEqual(144 - (13 * _players.Count), game.Deck.Tiles.Count);
             for (var i = 0; i < _players.Count; i++)
             {
-                Assert.AreEqual(13, result.Players[i].Hand.Count);
-                Assert.IsNotNull(result.Players[i].Wind);
+                Assert.AreEqual(13, game.Players[i].Hand.Count);
+                Assert.IsNotNull(game.Players[i].Wind);
             }
-            Assert.AreEqual(4, result.Players.Count); // ToDo: Optional number of players
-            Assert.AreEqual(true, result.Players[0].IsHuman);
+            Assert.AreEqual(4, game.Players.Count); // ToDo: Optional number of players
+            Assert.AreEqual(true, game.Players[0].IsHuman);
             // Set up the active player
             for (var i = 0; i < _players.Count; i++)
             {
@@ -88,11 +113,11 @@ namespace Mahjong.Tests
                 // ToDo: Make this a constant
                 if (_players[i].Wind == "east")
                 {
-                    Assert.AreEqual(true, result.Players[i].IsActive);
+                    Assert.AreEqual(true, game.Players[i].IsActive);
                 }
                 else
                 {
-                    Assert.AreEqual(false, result.Players[i].IsActive);
+                    Assert.AreEqual(false, game.Players[i].IsActive);
                 }
             }
         }

@@ -7,6 +7,7 @@ namespace Mahjong
         public List<Player> Players = new List<Player>();
         public Deck Deck = new Deck();
         public DiscardPile DiscardPile = new DiscardPile();
+        public string Finished = "false";
 
         public Game(List<Player> players, Deck _deck, DiscardPile _discardPile)
         {

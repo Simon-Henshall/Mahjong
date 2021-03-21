@@ -147,6 +147,41 @@ namespace Mahjong
             return _players;
         }
 
+        public Player GetActivePlayer()
+        {
+            for (var i = 0; i < _playerCount; i++)
+            {
+                if (_players[i].IsActive)
+                {
+                    return _players[i];
+                }
+            }
+
+            throw new Exception("No active player could be found");
+        }
+
+        public List<Player> SwapPlayer()
+        {
+            for (var i = 0; i < _playerCount; i++) {
+                if (_players[i].IsActive)
+                {
+                    _players[i].IsActive = false;
+                    if (i + 1 == _playerCount)
+                    {
+                        _players[0].IsActive = true;
+                        break;
+                    }
+                    else
+                    {
+                        _players[i + 1].IsActive = true;
+                        break;
+                    }
+                }  
+            }
+
+            return _players;
+        }
+
         public Tile DrawTile(Deck deck, Player activePlayer, [Optional] string location, [Optional] bool playerWantsTile)
         {
             Tile selectedTile;
@@ -155,8 +190,9 @@ namespace Mahjong
             {
                 _log.Debug($"(from the discard pile)");
                 int selectedTileIndex = _random.Next(_discardPile.Tiles.Count - 1);
-                _discardPile.Tiles.RemoveAt(selectedTileIndex);
                 selectedTile = _discardPile.Tiles[selectedTileIndex];
+                _discardPile.Tiles.RemoveAt(selectedTileIndex);
+                activePlayer.Hand.Add(selectedTile); // The player must take the tile in this logic path
             }
             else
             {
