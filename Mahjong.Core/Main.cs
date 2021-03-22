@@ -237,10 +237,10 @@ namespace Mahjong
             return game;
         }
 
-        // Called with only three tiles to check whether or not they form a valid chi
-        public static bool CalculateChi(Hand hand) // hand.Tiles.Count = 3
         {
 
+        public static bool CalculateChi(Hand hand)
+        {
             var orderedTiles = hand.Tiles.OrderBy(tile => tile.Number);
             int count = 1; // We always have at least one tile
             Tile firstTile = hand.Tiles.First();
@@ -279,20 +279,70 @@ namespace Mahjong
             return false;
         }
 
-        // Called with only three tiles to check whether or not they form a valid pong
-        public static bool CalculatePong(Hand hand) // hand.Tiles.Count = 3
+        public static bool CalculatePong(Hand hand)
         {
-            // Sets are only scored when they're all of the same suit
-            var firstTile = hand.Tiles.First();
-            return hand.Tiles.All(tile => tile.Suit == firstTile.Suit && tile.Number == firstTile.Number);
+            var orderedTiles = hand.Tiles.OrderBy(tile => tile.Number);
+            int count = 0;
+            Tile firstTile = hand.Tiles.First();
+            foreach (var tile in orderedTiles)
+            {
+                // New value contributes to sequence
+                // Note sets are only scored when all tiles are of the same suit and are the same number
+                if (tile.Number == firstTile.Number && tile.Suit == firstTile.Suit)
+                {
+                    count++;
+                }
+                // End of one sequence, start of another
+                else
+                {
+                    if (count >= 3)
+                    {
+                        //_log.Info($"Found sequence of length {count}, starting at {firstNumber}");
+                        return true;
+                    }
+                    count = 0;
+                }
+            }
+            if (count >= 3)
+            {
+                //_log.Info($"Found sequence of length {count}, starting at {firstNumber}");
+                return true;
+            }
+
+            return false;
         }
 
-        // Called with only four tiles to check whether or not they form a valid kang
-        public static bool CalculateKang(Hand hand) // hand.Tiles.Count = 4
+        public static bool CalculateKang(Hand hand)
         {
-            // Sets are only scored when they're all of the same suit
-            var firstTile = hand.Tiles.First();
-            return hand.Tiles.All(tile => tile.Suit == firstTile.Suit && tile.Number == firstTile.Number);
+            var orderedTiles = hand.Tiles.OrderBy(tile => tile.Number);
+            int count = 0;
+            Tile firstTile = hand.Tiles.First();
+            foreach (var tile in orderedTiles)
+            {
+                // New value contributes to sequence
+                // Note sets are only scored when all tiles are of the same suit and are the same number
+                if (tile.Number == firstTile.Number && tile.Suit == firstTile.Suit)
+                {
+                    count++;
+                }
+                // End of one sequence, start of another
+                else
+                {
+                    if (count >= 4)
+                    {
+                        //_log.Info($"Found sequence of length {count}, starting at {firstNumber}");
+                        return true;
+                    }
+                    count = 0;
+                }
+            }
+            if (count >= 4)
+            {
+                //_log.Info($"Found sequence of length {count}, starting at {firstNumber}");
+                return true;
+            }
+
+            return false;
         }
     }
 }

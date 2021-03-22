@@ -123,6 +123,7 @@ namespace Mahjong.Tests
         }
 
         [TestFixture]
+        // Called with only three tiles to check whether or not they form a valid chi
         public class ChiCalcuation
         {
             private static readonly List<Hand> _GoodChiTestData = new List<Hand>()
@@ -247,6 +248,7 @@ namespace Mahjong.Tests
         }
 
         [TestFixture]
+        // Called with only three tiles to check whether or not they form a valid pong
         public class PongCalcuation
         {
             private static readonly List<Hand> _GoodPongTestData = new List<Hand>()
@@ -385,6 +387,7 @@ namespace Mahjong.Tests
         }
 
         [TestFixture]
+        // Called with only four tiles to check whether or not they form a valid chi
         public class KangCalcuation
         {
             private static readonly List<Hand> _GoodKangTestData = new List<Hand>()
