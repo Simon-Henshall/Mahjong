@@ -123,7 +123,6 @@ namespace Mahjong.Tests
         }
 
         [TestFixture]
-        // Called with only three tiles to check whether or not they form a valid chi
         public class ChiCalcuation
         {
             private static readonly List<Hand> _GoodChiTestData = new List<Hand>()
@@ -180,10 +179,17 @@ namespace Mahjong.Tests
             };
 
             [TestCaseSource(nameof(_GoodChiTestData))]
-            public void TestIsChi(Hand hand)
+            public void TestHasChi(Hand testHand)
             {
-                var result = MainLogic.CalculateChi(hand);
+                var player = new Player
+                {
+                    Hand = testHand
+                };
+                var result = MainLogic.CalculateChi(player);
                 Assert.IsTrue(result);
+                Assert.AreEqual(1, player.Hand.Chis.Count);
+                Assert.AreEqual(3, player.Hand.Chis[0].Count);
+                Assert.AreEqual(testHand.Tiles, player.Hand.Chis[0]);
             }
 
             private static readonly List<Hand> _BadChiTestData = new List<Hand>()
@@ -240,15 +246,19 @@ namespace Mahjong.Tests
             };
 
             [TestCaseSource(nameof(_BadChiTestData))]
-            public void TestIsNotChi(Hand hand)
+            public void TestHasNoChi(Hand testHand)
             {
-                var result = MainLogic.CalculateChi(hand);
+                var player = new Player
+                {
+                    Hand = testHand
+                };
+                var result = MainLogic.CalculateChi(player);
                 Assert.IsFalse(result);
+                Assert.AreEqual(0, player.Hand.Chis.Count);
             }
         }
 
         [TestFixture]
-        // Called with only three tiles to check whether or not they form a valid pong
         public class PongCalcuation
         {
             private static readonly List<Hand> _GoodPongTestData = new List<Hand>()
@@ -291,10 +301,17 @@ namespace Mahjong.Tests
             };
 
             [TestCaseSource(nameof(_GoodPongTestData))]
-            public void TestIsPong(Hand hand)
+            public void TestHasPong(Hand testHand)
             {
-                var result = MainLogic.CalculatePong(hand);
+                var player = new Player
+                {
+                    Hand = testHand
+                };
+                var result = MainLogic.CalculatePong(player);
                 Assert.IsTrue(result);
+                Assert.AreEqual(1, player.Hand.Pongs.Count);
+                Assert.AreEqual(3, player.Hand.Pongs[0].Count);
+                Assert.AreEqual(testHand.Tiles, player.Hand.Pongs[0]);
             }
 
             private static readonly List<Hand> _BadPongTestData = new List<Hand>()
@@ -379,15 +396,19 @@ namespace Mahjong.Tests
             };
 
             [TestCaseSource(nameof(_BadPongTestData))]
-            public void TestIsNotPong(Hand hand)
+            public void TestHasNoPong(Hand testHand)
             {
-                var result = MainLogic.CalculatePong(hand);
+                var player = new Player
+                {
+                    Hand = testHand
+                };
+                var result = MainLogic.CalculatePong(player);
                 Assert.IsFalse(result);
+                Assert.AreEqual(0, player.Hand.Pongs.Count);
             }
         }
 
         [TestFixture]
-        // Called with only four tiles to check whether or not they form a valid chi
         public class KangCalcuation
         {
             private static readonly List<Hand> _GoodKangTestData = new List<Hand>()
@@ -435,10 +456,17 @@ namespace Mahjong.Tests
             };
 
             [TestCaseSource(nameof(_GoodKangTestData))]
-            public void TestIsKang(Hand hand)
+            public void TestHasKang(Hand testHand)
             {
-                var result = MainLogic.CalculateKang(hand);
+                var player = new Player
+                {
+                    Hand = testHand
+                };
+                var result = MainLogic.CalculateKang(player);
                 Assert.IsTrue(result);
+                Assert.AreEqual(1, player.Hand.Kangs.Count);
+                Assert.AreEqual(4, player.Hand.Kangs[0].Count);
+                Assert.AreEqual(testHand.Tiles, player.Hand.Kangs[0]);
             }
 
             private static readonly List<Hand> _BadKangTestData = new List<Hand>()
@@ -518,10 +546,15 @@ namespace Mahjong.Tests
             };
 
             [TestCaseSource(nameof(_BadKangTestData))]
-            public void TestIsNotKang(Hand hand)
+            public void TestHasNoKang(Hand testHand)
             {
-                var result = MainLogic.CalculateKang(hand);
+                var player = new Player
+                {
+                    Hand = testHand
+                };
+                var result = MainLogic.CalculateKang(player);
                 Assert.IsFalse(result);
+                Assert.AreEqual(0, player.Hand.Kangs.Count);
             }
         }
     }

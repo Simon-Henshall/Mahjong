@@ -11,5 +11,7 @@ namespace Mahjong
         public string Wind { get; set; }
 
         public Hand Hand { get; set; } = new Hand(new List<Tile>());
+
+        public int Score { get; set; } = 0;
     }
 }

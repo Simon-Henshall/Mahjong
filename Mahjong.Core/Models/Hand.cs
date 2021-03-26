@@ -13,5 +13,13 @@ namespace Mahjong
                 Tiles.Add(tile);
             }
         }
+
+        public List<List<Tile>> Pairs = new List<List<Tile>>();
+
+        public List<List<Tile>> Pongs = new List<List<Tile>>();
+
+        public List<List<Tile>> Kangs = new List<List<Tile>>();
+
+        public List<List<Tile>> Chis = new List<List<Tile>>();
     }
 }
