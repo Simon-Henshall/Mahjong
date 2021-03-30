@@ -237,7 +237,27 @@ namespace Mahjong
             return game;
         }
 
+        // Play the game
+        public void PlayGame(Game _game)
         {
+            while (_game.Finished == "false")
+            {
+                foreach (Player _player in _players)
+                {
+                    if (_player.IsActive)
+                    {
+                        if (_player.IsHuman)
+                        {
+                            // User input
+                        }
+                        else
+                        {
+                            // Bot logic
+                        }
+                    }
+                }
+            }
+        }
 
         public static bool CalculateChi(Player player)
         {
@@ -355,7 +375,7 @@ namespace Mahjong
             if (count >= 4)
             {
                 //_log.Info($"Found sequence of length {count}, starting at {firstNumber}");
-                player.Hand.Kangs.Add(validTiles);
+                player.Hand.Kangs.Add(new TileSet(validTiles));
                 return true;
             }
             validTiles = new List<Tile>();
@@ -388,6 +408,118 @@ namespace Mahjong
             }
 
             return null;
+        }
+
+        public static int CalculateScore(Player player)
+        {
+            int score = 0;
+
+            // Check for special hands first, as they override the score
+            SpecialHand specialHand = CalculateSpecialHand(player);
+            if (specialHand != null)
+            {
+                return specialHand.Score;
+            }
+
+            // Check pretties
+            foreach (Tile tile in player.Hand)
+            {
+                if (tile.Suit == "pretty")
+                {
+                    score += 4;
+                }
+            }
+
+            // Check pairs
+            foreach (TileSet pair in player.Hand.Pairs)
+            {
+                if (!pair.Declared)
+                {
+                    if (pair.All(tile => tile.Suit == "dragon")) {
+                        score += 2;
+                    }
+                    if (pair.All(tile => tile.Suit == "wind" &&
+                        (tile.SpecialName == "east" || tile.SpecialName == player.Wind)
+                       ))
+                    {
+                        score += 2;
+                    }
+                }
+            }
+
+            // Check chis - non-scoring outside special hands
+
+            // Check pongs
+            foreach (TileSet pong in player.Hand.Pongs)
+            {
+                if (pong.Declared)
+                {
+                    score += 2;
+                }
+                else
+                {
+                    score += 4;
+                }
+            }
+
+            // Check kangs
+            foreach (TileSet kang in player.Hand.Kangs)
+            {
+                if (kang.Declared)
+                {
+                    score += 8;
+                }
+                else
+                {
+                    score += 16;
+                }
+            }
+
+            // Check doubles (after previous 'summed' score has been calculated)
+
+            // Pongs
+            foreach (TileSet pong in player.Hand.Pongs)
+            {
+                if (!pong.Declared)
+                {
+                    if (pong.All(tile => tile.Suit == "dragon"))
+                    {
+                        score *= 2;
+                    }
+                    if (pong.All(tile => tile.Suit == "wind" &&
+                        (tile.SpecialName == "east" || tile.SpecialName == player.Wind)
+                       ))
+                    {
+                        score *= 2;
+                    }
+                }
+            }
+
+            // Kangs
+            foreach (TileSet kang in player.Hand.Kangs)
+            {
+                if (!kang.Declared)
+                {
+                    if (kang.All(tile => tile.Suit == "dragon"))
+                    {
+                        score *= 2;
+                    }
+                    if (kang.All(tile => tile.Suit == "wind" &&
+                        (tile.SpecialName == "east" || tile.SpecialName == player.Wind)
+                       ))
+                    {
+                        score *= 2;
+                    }
+                }
+            }
+
+            // Pretty collection
+            // ToDo
+
+            // 1 to 9
+            // ToDo
+
+            return score;
         }
     }
 }
