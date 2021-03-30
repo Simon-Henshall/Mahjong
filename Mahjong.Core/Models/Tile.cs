@@ -1,4 +1,5 @@
-﻿using System.Runtime.InteropServices;
+﻿using System.Collections.Generic;
+using System.Runtime.InteropServices;
 
 namespace Mahjong
 {
@@ -14,5 +15,17 @@ namespace Mahjong
         public int Number { get; set; }
         public string Suit { get; set; }
         public string SpecialName { get; set; }
+    }
+
+    public class TileSet : List<Tile>
+    {
+        public TileSet(List<Tile> tiles, [Optional] bool declared)
+        {
+            Tiles = tiles;
+            Declared = declared;
+        }
+        
+        public bool Declared { get; set; }
+        public List<Tile> Tiles { get; set; }
     }
 }

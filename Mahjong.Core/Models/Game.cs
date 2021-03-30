@@ -4,6 +4,7 @@ namespace Mahjong
 {
     public class Game
     {
+        public List<SpecialHand> SpecialHands = new List<SpecialHand>();
         public List<Player> Players = new List<Player>();
         public Deck Deck = new Deck();
         public DiscardPile DiscardPile = new DiscardPile();

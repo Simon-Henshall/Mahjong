@@ -269,7 +269,7 @@ namespace Mahjong
                     if (count >= 3)
                     {
                         //_log.Info($"Found sequence of length {count}, starting at {firstNumber}");
-                        player.Hand.Chis.Add(validTiles);
+                        player.Hand.Chis.Add(new TileSet(validTiles));
                         return true;
                     }
                     count = 1;
@@ -279,7 +279,7 @@ namespace Mahjong
             if (count >= 3)
             {
                 //_log.Info($"Found sequence of length {count}, starting at {firstNumber}");
-                player.Hand.Chis.Add(validTiles);
+                player.Hand.Chis.Add(new TileSet(validTiles));
                 return true;
             }
             validTiles = new List<Tile>();
@@ -308,7 +308,7 @@ namespace Mahjong
                     if (count >= 3)
                     {
                         //_log.Info($"Found sequence of length {count}, starting at {firstNumber}");
-                        player.Hand.Pongs.Add(validTiles);
+                        player.Hand.Pongs.Add(new TileSet(validTiles));
                         return true;
                     }
                     count = 0;
@@ -317,7 +317,7 @@ namespace Mahjong
             if (count >= 3)
             {
                 //_log.Info($"Found sequence of length {count}, starting at {firstNumber}");
-                player.Hand.Pongs.Add(validTiles);
+                player.Hand.Pongs.Add(new TileSet(validTiles));
                 return true;
             }
             validTiles = new List<Tile>();
@@ -346,7 +346,7 @@ namespace Mahjong
                     if (count >= 4)
                     {
                         //_log.Info($"Found sequence of length {count}, starting at {firstNumber}");
-                        player.Hand.Kangs.Add(validTiles);
+                        player.Hand.Kangs.Add(new TileSet(validTiles));
                         return true;
                     }
                     count = 0;
@@ -361,6 +361,33 @@ namespace Mahjong
             validTiles = new List<Tile>();
 
             return false;
+        }
+
+        public static SpecialHand CalculateSpecialHand(Player player)
+        {
+            // Create all special hands
+            List<SpecialHand> specialHands = new List<SpecialHand>
+            {
+                new SpecialHand
+                {
+                    Name = "Awesome Hand",
+                    Score = 50,
+                    Tiles = new List<Tile>
+                    {
+                        new Tile(0, "", "dragon")
+                    }
+                }
+            };
+
+            foreach (SpecialHand specialHand in specialHands)
+            {
+                if (Enumerable.SequenceEqual(player.Hand.Tiles.OrderBy(t => t), specialHand.Tiles.OrderBy(t => t)))
+                {
+                    return specialHand;
+                }
+            }
+
+            return null;
         }
     }
 }

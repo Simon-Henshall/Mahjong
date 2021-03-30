@@ -188,8 +188,8 @@ namespace Mahjong.Tests
                 var result = MainLogic.CalculateChi(player);
                 Assert.IsTrue(result);
                 Assert.AreEqual(1, player.Hand.Chis.Count);
-                Assert.AreEqual(3, player.Hand.Chis[0].Count);
-                Assert.AreEqual(testHand.Tiles, player.Hand.Chis[0]);
+                Assert.AreEqual(3, player.Hand.Chis[0].Tiles.Count);
+                Assert.AreEqual(testHand.Tiles, player.Hand.Chis[0].Tiles);
             }
 
             private static readonly List<Hand> _BadChiTestData = new List<Hand>()
@@ -310,8 +310,8 @@ namespace Mahjong.Tests
                 var result = MainLogic.CalculatePong(player);
                 Assert.IsTrue(result);
                 Assert.AreEqual(1, player.Hand.Pongs.Count);
-                Assert.AreEqual(3, player.Hand.Pongs[0].Count);
-                Assert.AreEqual(testHand.Tiles, player.Hand.Pongs[0]);
+                Assert.AreEqual(3, player.Hand.Pongs[0].Tiles.Count);
+                Assert.AreEqual(testHand.Tiles, player.Hand.Pongs[0].Tiles);
             }
 
             private static readonly List<Hand> _BadPongTestData = new List<Hand>()
@@ -465,8 +465,8 @@ namespace Mahjong.Tests
                 var result = MainLogic.CalculateKang(player);
                 Assert.IsTrue(result);
                 Assert.AreEqual(1, player.Hand.Kangs.Count);
-                Assert.AreEqual(4, player.Hand.Kangs[0].Count);
-                Assert.AreEqual(testHand.Tiles, player.Hand.Kangs[0]);
+                Assert.AreEqual(4, player.Hand.Kangs[0].Tiles.Count);
+                Assert.AreEqual(testHand.Tiles, player.Hand.Kangs[0].Tiles);
             }
 
             private static readonly List<Hand> _BadKangTestData = new List<Hand>()

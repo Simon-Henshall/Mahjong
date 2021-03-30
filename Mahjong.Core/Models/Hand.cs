@@ -4,6 +4,10 @@ namespace Mahjong
 {
     public class Hand : List<Tile>
     {
+        public Hand()
+        {
+        }
+        
         public List<Tile> Tiles = new List<Tile>();
 
         public Hand(List<Tile> tiles)
@@ -14,12 +18,12 @@ namespace Mahjong
             }
         }
 
-        public List<List<Tile>> Pairs = new List<List<Tile>>();
+        public List<TileSet> Pairs = new List<TileSet>();
 
-        public List<List<Tile>> Pongs = new List<List<Tile>>();
+        public List<TileSet> Pongs = new List<TileSet>();
 
-        public List<List<Tile>> Kangs = new List<List<Tile>>();
+        public List<TileSet> Kangs = new List<TileSet>();
 
-        public List<List<Tile>> Chis = new List<List<Tile>>();
+        public List<TileSet> Chis = new List<TileSet>();
     }
 }
