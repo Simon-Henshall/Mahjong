@@ -9,7 +9,6 @@ namespace Mahjong.Tests
         private Deck _deck;
         private DiscardPile _discardPile;
         private List<Player> _players;
-        private int _playerCount = 4;
 
         [SetUp]
         public void Setup()
@@ -31,13 +30,13 @@ namespace Mahjong.Tests
         public void SwapPlayer()
         {
             _mainLogic.SwapPlayer();
-            for (var i = 0; i < _playerCount; i++)
+            for (var i = 0; i < Constants.PlayerCount; i++)
             {
                 // The East player will be active at the start of the game
                 if (_players[i].Wind == "east")
                 {
                     Assert.AreEqual(false, _players[i].IsActive);
-                    if (i + 1 == _playerCount)
+                    if (i + 1 == Constants.PlayerCount)
                     {
                         Assert.AreEqual(true, _players[0].IsActive);
                     }
@@ -47,7 +46,7 @@ namespace Mahjong.Tests
                     }
                 }
             }
-            
+
         }
 
         [Test]
@@ -75,7 +74,7 @@ namespace Mahjong.Tests
         {
             Player _player1 = _mainLogic.GetActivePlayer();
             _mainLogic.DrawTile(_deck, _player1, "wall", false); // Get a tile into the discard pile
-            Assert.AreEqual(1, _discardPile.Tiles.Count); 
+            Assert.AreEqual(1, _discardPile.Tiles.Count);
             _mainLogic.SwapPlayer();
             Player _player2 = _mainLogic.GetActivePlayer();
             int theoreticalPlayerTwoTileCount = _player2.Hand.Count + 1;
@@ -132,7 +131,7 @@ namespace Mahjong.Tests
                         new Tile(1, "bamboo"),
                         new Tile(2, "bamboo"),
                         new Tile(3, "bamboo")
-                    }  
+                    }
                 ),
                 new Hand(new List<Tile>()
                     {

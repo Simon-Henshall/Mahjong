@@ -16,10 +16,6 @@ namespace Mahjong
         private DiscardPile _discardPile;
         private List<Player> _players;
 
-        // ToDo: Shift this logic
-        // Game variables
-        private const int _playerCount = 4;
-
         public MainLogic()
         {
             _log = LogManager.GetLogger("mahjong");
@@ -40,7 +36,7 @@ namespace Mahjong
             _players = new List<Player>();
 
             // Set up the AI players
-            for (var i = 0; i < _playerCount; i++)
+            for (var i = 0; i < Constants.PlayerCount; i++)
             {
                 Player player = AddPlayer();
                 DrawStartingHand(_deck, player);
@@ -55,7 +51,7 @@ namespace Mahjong
             // Assign winds
             var winds = new List<string> { "east", "south", "west", "north" };
             var randomIndex = _random.Next(winds.Count - 1);
-            for (var i = 0; i < _playerCount; i++)
+            for (var i = 0; i < Constants.PlayerCount; i++)
             {
                 if (randomIndex == winds.Count - 1)
                 {
@@ -70,7 +66,7 @@ namespace Mahjong
             }
 
             // Set up the active player
-            for (var i = 0; i < _playerCount; i++)
+            for (var i = 0; i < Constants.PlayerCount; i++)
             {
                 // The East player will be active at the start of the game
                 if (_players[i].Wind == "east")
@@ -149,7 +145,7 @@ namespace Mahjong
 
         public Player GetActivePlayer()
         {
-            for (var i = 0; i < _playerCount; i++)
+            for (var i = 0; i < Constants.PlayerCount; i++)
             {
                 if (_players[i].IsActive)
                 {
@@ -162,11 +158,11 @@ namespace Mahjong
 
         public List<Player> SwapPlayer()
         {
-            for (var i = 0; i < _playerCount; i++) {
+            for (var i = 0; i < Constants.PlayerCount; i++) {
                 if (_players[i].IsActive)
                 {
                     _players[i].IsActive = false;
-                    if (i + 1 == _playerCount)
+                    if (i + 1 == Constants.PlayerCount)
                     {
                         _players[0].IsActive = true;
                         break;
@@ -390,18 +386,26 @@ namespace Mahjong
             {
                 new SpecialHand
                 {
-                    Name = "Awesome Hand",
+                    Name = "Bamboo Forest",
                     Score = 50,
                     Tiles = new List<Tile>
                     {
-                        new Tile(0, "", "dragon")
+                        new Tile(1, "bamboo"),
+                        new Tile(2, "bamboo"),
+                        new Tile(3, "bamboo"),
+                        new Tile(4, "bamboo"),
+                        new Tile(5, "bamboo"),
+                        new Tile(6, "bamboo"),
+                        new Tile(7, "bamboo"),
+                        new Tile(8, "bamboo"),
+                        new Tile(9, "bamboo")
                     }
                 }
             };
 
             foreach (SpecialHand specialHand in specialHands)
             {
-                if (Enumerable.SequenceEqual(player.Hand.Tiles.OrderBy(t => t), specialHand.Tiles.OrderBy(t => t)))
+                if (player.Hand.Tiles.ContainsSubsequence(specialHand.Tiles))
                 {
                     return specialHand;
                 }
@@ -514,10 +518,23 @@ namespace Mahjong
             }
 
             // Pretty collection
-            // ToDo
+            if (player.Hand.All(tile => tile.Suit == "pretty" &&
+                (tile.SpecialName == "flowers" || tile.SpecialName == "seasons")
+                ))
+            {
+                score *= 2;
+            }
 
             // 1 to 9
-            // ToDo
+            if (player.Hand.OrderBy(a => a)
+                .Zip(player.Hand.Skip(1), (a, b) => (a.Number + 1) == b.Number)
+                .All(x => x)
+                )
+            {
+                score *= 2;
+            }
+
+            player.Score += score;
 
             return score;
         }
