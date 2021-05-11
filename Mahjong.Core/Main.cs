@@ -31,6 +31,44 @@ namespace Mahjong
             return new Player();
         }
 
+        public Player ChooseStartingPlayer(List<Player> players)
+        {
+            Player startingPlayer = players.Find(player => Equals(player.WonLastGame, true));
+            int newStarterIndex = players.FindIndex(player => Equals(player.WonLastGame, true));
+            
+            // The first game
+            if (startingPlayer == null)
+            {
+                // ToDo: Tie to a die function
+                startingPlayer = players[_random.Next(_players.Count - 1)];
+            }
+            else
+            {
+                // Only shift player if the winner wasn't East
+                if (startingPlayer.Wind != Constants.Winds.East)
+                {
+                    // Update old player activity
+                    startingPlayer.IsActive = false;
+                    
+                    if (newStarterIndex == Constants.PlayerCount - 1)
+                    {
+                        newStarterIndex = 0;
+                    }
+                    else
+                    {
+                        newStarterIndex += 1;
+                    }
+
+                    startingPlayer = players[newStarterIndex];
+                }
+            }
+
+            // Update new player activity
+            startingPlayer.IsActive = true;
+
+            return startingPlayer;
+        }
+
         public List<Player> SetUpPlayers()
         {
             _players = new List<Player>();
@@ -46,33 +84,42 @@ namespace Mahjong
             // Set up the human player
             _players[0].IsHuman = true;
 
-            // ToDo: Rotate this for subsequent games
-            // ToDo: Tie to a die function
+            var startingPlayer = ChooseStartingPlayer(_players);
+            int playerIndex = _players.FindIndex(player => player == startingPlayer);
+            
             // Assign winds
-            var winds = new List<string> { "east", "south", "west", "north" };
-            var randomIndex = _random.Next(winds.Count - 1);
+            var winds = new List<string>
+                {
+                    Constants.Winds.North,
+                    Constants.Winds.East,
+                    Constants.Winds.South,
+                    Constants.Winds.West
+                };
+
+            // Start by giving out the East wind
+            var windIndex = 1;
+
             for (var i = 0; i < Constants.PlayerCount; i++)
             {
-                if (randomIndex == winds.Count - 1)
+                if (playerIndex == Constants.PlayerCount - 1)
                 {
-                    randomIndex = 0;
+                    playerIndex = 0;
                 }
                 else
                 {
-                    randomIndex += 1;
+                    playerIndex += 1;
                 }
 
-                _players[i].Wind = winds[randomIndex];
-            }
-
-            // Set up the active player
-            for (var i = 0; i < Constants.PlayerCount; i++)
-            {
-                // The East player will be active at the start of the game
-                if (_players[i].Wind == "east")
+                if (windIndex == winds.Count - 1)
                 {
-                    _players[i].IsActive = true;
+                    windIndex = 0;
                 }
+                else
+                {
+                    windIndex += 1;
+                }
+
+                _players[playerIndex].Wind = winds[windIndex];
             }
 
             return _players;
@@ -85,7 +132,13 @@ namespace Mahjong
 
             var tileDuplicateCount = 4;
             var suits = new List<string> { "bamboo", "circles", "characters" };
-            var winds = new List<string> { "east", "south", "west", "north" };
+            var winds = new List<string>
+                {
+                    Constants.Winds.North,
+                    Constants.Winds.East,
+                    Constants.Winds.West,
+                    Constants.Winds.South
+                };
             var dragons = new List<string> { "green", "red", "white" };
             var pretties = new List<string> { "flowers", "seasons" };
 
@@ -236,22 +289,30 @@ namespace Mahjong
         // Play the game
         public void PlayGame(Game _game)
         {
-            while (_game.Finished == "false")
+            // ToDo: Handle turns, AI and game finishing
+            
+            //while (!_game.Finished)
+            //{
+            //    foreach (Player _player in _players)
+            //    {
+            //        if (_player.IsActive)
+            //        {
+            //            if (_player.IsHuman)
+            //            {
+            //                // User input
+            //            }
+            //            else
+            //            {
+            //                // Bot logic
+            //            }
+            //        }
+            //    }
+            //}
+
+            // ToDo: Tie this to score
+            if (_game.Finished)
             {
-                foreach (Player _player in _players)
-                {
-                    if (_player.IsActive)
-                    {
-                        if (_player.IsHuman)
-                        {
-                            // User input
-                        }
-                        else
-                        {
-                            // Bot logic
-                        }
-                    }
-                }
+                _players[0].WonLastGame = true;
             }
         }
 
@@ -443,7 +504,7 @@ namespace Mahjong
                         score += 2;
                     }
                     if (pair.All(tile => tile.Suit == "wind" &&
-                        (tile.SpecialName == "east" || tile.SpecialName == player.Wind)
+                        (tile.SpecialName == Constants.Winds.East || tile.SpecialName == player.Wind)
                        ))
                     {
                         score += 2;
@@ -491,7 +552,7 @@ namespace Mahjong
                         score *= 2;
                     }
                     if (pong.All(tile => tile.Suit == "wind" &&
-                        (tile.SpecialName == "east" || tile.SpecialName == player.Wind)
+                        (tile.SpecialName == Constants.Winds.East || tile.SpecialName == player.Wind)
                        ))
                     {
                         score *= 2;
@@ -509,7 +570,7 @@ namespace Mahjong
                         score *= 2;
                     }
                     if (kang.All(tile => tile.Suit == "wind" &&
-                        (tile.SpecialName == "east" || tile.SpecialName == player.Wind)
+                        (tile.SpecialName == Constants.Winds.East || tile.SpecialName == player.Wind)
                        ))
                     {
                         score *= 2;

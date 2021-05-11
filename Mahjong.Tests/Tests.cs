@@ -1,9 +1,10 @@
+using Mahjong;
 using NUnit.Framework;
 using System.Collections.Generic;
 
-namespace Mahjong.Tests
+namespace Tests
 {
-    public class Tests
+    public class BaseGameplayMechanics
     {
         private MainLogic _mainLogic;
         private Deck _deck;
@@ -20,10 +21,19 @@ namespace Mahjong.Tests
         }
 
         [Test]
+        public void ChooseStartingPlayer() {
+            Player player = _mainLogic.ChooseStartingPlayer(_players);
+            Assert.AreEqual(true, player.IsActive);
+            // We cannot realiably check for East wind here as the method will be called twice due to the invocation above
+            // ChooseStartingPlayer() checks based on .WonLastGame, which will not be set yet, so .IsActive will be set twice
+        }
+
+        [Test]
         public void GetActivePlayer()
         {
             Player player = _mainLogic.GetActivePlayer();
             Assert.AreEqual(true, player.IsActive);
+            Assert.AreEqual(Constants.Winds.East, player.Wind);
         }
 
         [Test]
@@ -33,7 +43,7 @@ namespace Mahjong.Tests
             for (var i = 0; i < Constants.PlayerCount; i++)
             {
                 // The East player will be active at the start of the game
-                if (_players[i].Wind == "east")
+                if (_players[i].Wind == Constants.Winds.East)
                 {
                     Assert.AreEqual(false, _players[i].IsActive);
                     if (i + 1 == Constants.PlayerCount)
@@ -102,15 +112,16 @@ namespace Mahjong.Tests
             {
                 Assert.AreEqual(13, game.Players[i].Hand.Count);
                 Assert.IsNotNull(game.Players[i].Wind);
+                Assert.IsNotNull(game.Players[i].IsActive);
+                Assert.IsNotNull(game.Players[i].IsHuman);
             }
-            Assert.AreEqual(4, game.Players.Count); // ToDo: Optional number of players
+            Assert.AreEqual(Constants.PlayerCount, game.Players.Count);
             Assert.AreEqual(true, game.Players[0].IsHuman);
             // Set up the active player
             for (var i = 0; i < _players.Count; i++)
             {
                 // The East player will be active at the start of the game
-                // ToDo: Make this a constant
-                if (_players[i].Wind == "east")
+                if (_players[i].Wind == Constants.Winds.East)
                 {
                     Assert.AreEqual(true, game.Players[i].IsActive);
                 }
@@ -120,7 +131,10 @@ namespace Mahjong.Tests
                 }
             }
         }
+    }
 
+    public class ComboTiles
+    {
         [TestFixture]
         public class ChiCalcuation
         {
