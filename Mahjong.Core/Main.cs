@@ -10,8 +10,8 @@ namespace Mahjong
     public class MainLogic
     {
         private readonly ILog _log;
-        private Random _random;
-        private List<Tile> _tileList;
+        private readonly Random _random;
+        private readonly List<Tile> _tileList;
         private Deck _deck;
         private DiscardPile _discardPile;
         private List<Player> _players;
@@ -198,15 +198,7 @@ namespace Mahjong
 
         public Player GetActivePlayer()
         {
-            for (var i = 0; i < Constants.PlayerCount; i++)
-            {
-                if (_players[i].IsActive)
-                {
-                    return _players[i];
-                }
-            }
-
-            throw new Exception("No active player could be found");
+            return _players.Find(player => Equals(player.IsActive, true));
         }
 
         public List<Player> SwapPlayer()
@@ -316,7 +308,7 @@ namespace Mahjong
             }
         }
 
-        public static bool CalculateChi(Player player)
+        public bool CalculateChi(Player player)
         {
             var orderedTiles = player.Hand.Tiles.OrderBy(tile => tile.Number);
             int count = 1; // We always have at least one tile
@@ -345,7 +337,7 @@ namespace Mahjong
                 {
                     if (count >= 3)
                     {
-                        //_log.Info($"Found sequence of length {count}, starting at {firstNumber}");
+                        _log.Info($"Found sequence of length {count}, starting at {tile.Number}");
                         player.Hand.Chis.Add(new TileSet(validTiles));
                         return true;
                     }
@@ -355,16 +347,15 @@ namespace Mahjong
             }
             if (count >= 3)
             {
-                //_log.Info($"Found sequence of length {count}, starting at {firstNumber}");
+                _log.Info($"Found sequence of length {count}, starting at {firstTile.Number}");
                 player.Hand.Chis.Add(new TileSet(validTiles));
                 return true;
             }
-            validTiles = new List<Tile>();
 
             return false;
         }
 
-        public static bool CalculatePong(Player player)
+        public bool CalculatePong(Player player)
         {
             var orderedTiles = player.Hand.Tiles.OrderBy(tile => tile.Number);
             int count = 0;
@@ -384,7 +375,7 @@ namespace Mahjong
                 {
                     if (count >= 3)
                     {
-                        //_log.Info($"Found sequence of length {count}, starting at {firstNumber}");
+                        _log.Info($"Found sequence of length {count}, starting at {tile.Number}");
                         player.Hand.Pongs.Add(new TileSet(validTiles));
                         return true;
                     }
@@ -393,16 +384,15 @@ namespace Mahjong
             }
             if (count >= 3)
             {
-                //_log.Info($"Found sequence of length {count}, starting at {firstNumber}");
+                _log.Info($"Found sequence of length {count}, starting at {firstTile.Number}");
                 player.Hand.Pongs.Add(new TileSet(validTiles));
                 return true;
             }
-            validTiles = new List<Tile>();
 
             return false;
         }
 
-        public static bool CalculateKang(Player player)
+        public bool CalculateKang(Player player)
         {
             var orderedTiles = player.Hand.Tiles.OrderBy(tile => tile.Number);
             int count = 0;
@@ -422,7 +412,7 @@ namespace Mahjong
                 {
                     if (count >= 4)
                     {
-                        //_log.Info($"Found sequence of length {count}, starting at {firstNumber}");
+                        _log.Info($"Found sequence of length {count}, starting at {tile.Number}");
                         player.Hand.Kangs.Add(new TileSet(validTiles));
                         return true;
                     }
@@ -431,11 +421,10 @@ namespace Mahjong
             }
             if (count >= 4)
             {
-                //_log.Info($"Found sequence of length {count}, starting at {firstNumber}");
+                _log.Info($"Found sequence of length {count}, starting at {firstTile.Number}");
                 player.Hand.Kangs.Add(new TileSet(validTiles));
                 return true;
             }
-            validTiles = new List<Tile>();
 
             return false;
         }
@@ -472,7 +461,7 @@ namespace Mahjong
                 }
             }
 
-            return null;
+            return new SpecialHand();
         }
 
         public static int CalculateScore(Player player)
